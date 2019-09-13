@@ -5,6 +5,7 @@ Created on Wed Sep 11 11:38:52 2019
 @author: s151385
 """
 from sklearn.datasets import load_breast_cancer
+from sklearn import preprocessing
 # =============================================================================
 # breast_cancer = load_breast_cancer()
 # X_train = breast_cancer.data[:400, :]
