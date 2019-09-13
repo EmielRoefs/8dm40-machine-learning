@@ -4,10 +4,19 @@ Created on Wed Sep 11 11:38:52 2019
 
 @author: s151385
 """
+from sklearn.datasets import load_breast_cancer
+# =============================================================================
+# breast_cancer = load_breast_cancer()
+# X_train = breast_cancer.data[:400, :]
+# y_train = breast_cancer.target[:400, np.newaxis]
+# X_test = breast_cancer.data[400:, :]
+# y_test = breast_cancer.target[400:, np.newaxis]
+# =============================================================================
 import numpy as np
 from sklearn.datasets import load_diabetes, load_breast_cancer
 import math
-      
+
+     
 def classification(X_train,y_train,X_test,y_test,k):
     # kNN classification
     # input: X_train: feature space used for training
@@ -34,6 +43,26 @@ def classification(X_train,y_train,X_test,y_test,k):
     roc = ROC(y_test,predicted_y)
     
     return(roc,predicted_y)
+    
+def regression(X_train,y_train,X_test,y_test,k):
+    import matplotlib.pyplot as plt
+    # kNN classification
+    # input: X_train: feature space used for training
+    #       X_test: feature space used for testing
+    #       y_train: ground truth classification for train dataset
+    #       y_test: ground truth classification for test dataset
+    #       k: number of nearest neighbor used
+    # output: AUC of ROC as performance measure and predicted classification of test set
+    reg = np.zeros([len(X_test[:,0]),1])
+    for i in range(0,len(X_test[:,0])):
+        dist_sum = np.zeros([len(X_train[:,0]),1])
+        for j in range(0,len(X_train[:,0])):
+            dist = np.square(X_train[j,:]-X_test[i,:])
+            dist_sum[j] = math.sqrt(sum(dist))
+        dist_y = np.concatenate((dist_sum,y_train),axis=1)
+        dist_y_sort = dist_y[dist_y[:,0].argsort()]
+        reg[i] = sum(dist_y_sort[0:k,1])/k
+    return(reg)
 
 ### Some code Emiel wrote during his BEP, nice for viewing results
 def CM(true,predicted):
