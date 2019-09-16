@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import scipy.stats as stats
 from math import *
 
-def visualize_gauss(X=X, Y=Y):
+def visualize_gauss(X, Y):
     plt.figure(figsize=(15,15))
     for feature in range(0,30):
         Xfeat = X[:, feature]
