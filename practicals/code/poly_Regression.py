@@ -27,6 +27,13 @@ X, y = generate_dataset(n=100, degree=4, noise=1.5)
 plt.plot(X, y, 'r.', markersize=12)
 
 X = X[:, np.newaxis]
+
+X_train = X[:80]
+y_train = y[:80]
+X_test = X[80:]
+y_test = y[80:]
+
+
 #%%
 
 from sklearn.preprocessing import PolynomialFeatures
@@ -39,26 +46,29 @@ def PolynomialRegression(degree=2, **kwargs):
     
 import matplotlib.pyplot as plt
 
-def PolyReg_plot(X=x, y=y):
-    X_test = np.linspace(-1.1, 1.1, 500)[:, None]
+def PolyReg_plot(X=X, y=y):
+    X_plot = np.linspace(-1.1, 1.1, 500)[:, None]
     plt.scatter(X.ravel(), y, color='red')
     axis = plt.axis()
     for degree in [1, 3, 5]:
-        y_test = PolynomialRegression(degree).fit(X, y).predict(X_test)
-        plt.plot(X_test.ravel(), y_test, label='degree={}'.format(degree))
+        y_plot = PolynomialRegression(degree).fit(X, y).predict(X_plot)
+        plt.plot(X_plot.ravel(), y_plot, label='degree={}'.format(degree))
     plt.legend(loc='best');
+    plt.show()
+
+PolyReg_plot(X=X_train, y=y_train)
 
 #%%
 
 from sklearn.model_selection import GridSearchCV
 
 def gridsearch(X=X, y=y):
-    param_grid = {'polynomialfeatures__degree': np.arange(21),
-                  'linearregression__fit_intercept': [True, False],
-                  'linearregression__normalize': [True, False]}
+    param_grid = {'polynomialfeatures__degree': np.arange(21)}
     grid = GridSearchCV(PolynomialRegression(), param_grid, cv=7)
     grid.fit(X,y);
     return grid.best_params_
+
+gridsearch(X=X, y=y)
 
 #%%
 import sklearn
@@ -74,6 +84,7 @@ def learningCurve(X=X, y=y):
     plt.ylim(0, 1)
     plt.xlabel('degree')
     plt.ylabel('score');
+    plt.show()
 
-
+learningCurve(X=X, y=y)
 
